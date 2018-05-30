@@ -1,6 +1,0 @@
-PRISMA_ENDPOINT="https://eu1.prisma.sh/public-brindledagger-239/prismaboilerplate/dev"
-PRISMA_SECRET="mysecret123"
-APP_SECRET="jwtsecret123"
-
-# https://eu1.prisma.sh/public-brindledagger-239/prismaboilerplate/dev
-# http://localhost:4466
