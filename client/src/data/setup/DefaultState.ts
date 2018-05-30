@@ -1,38 +1,29 @@
+// this file sets the local state defaults
+// add new global state step 1: create interfaces and default states
+
 export const types = {
-  USER: 'user',
   FORMS: 'forms'
 }
 
 interface IState {
-  user: {
-    __typename: string
-    loginStatus: boolean
-  }
-
   forms: {
     __typename: string
-    inputDescCreateLink: string
-    inputUrlCreateLink: string
-    inputEmailLogin: string
-    inputPasswordLogin: string
-    inputNameLogin: string
-    inputSearch: string
+    input_Signup_Name: string
+    input_Signup_Email: string
+    input_Signup_Password: string
+    input_Login_Email: string
+    input_Login_Password: string
   }
 }
 
 const defaultState: IState = {
-  user: {
-    __typename: types.USER,
-    loginStatus: false
-  },
   forms: {
     __typename: types.FORMS,
-    inputDescCreateLink: '',
-    inputUrlCreateLink: '',
-    inputEmailLogin: '',
-    inputPasswordLogin: '',
-    inputNameLogin: '',
-    inputSearch: ''
+    input_Signup_Name: '',
+    input_Signup_Email: '',
+    input_Signup_Password: '',
+    input_Login_Email: '',
+    input_Login_Password: ''
   }
 }
 
