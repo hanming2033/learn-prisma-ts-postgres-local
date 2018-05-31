@@ -1,8 +1,10 @@
 import * as React from 'react'
-import { Query, QueryResult, Mutation } from 'react-apollo'
+import { Query, QueryResult, Mutation, FetchResult } from 'react-apollo'
 import { GetSignUpInputsQuery, SignupUserMutation, SignupUserMutationVariables } from '../data/graphql-types'
 import { GET_SIGN_UP_INPUTS } from '../data/actions/Queries'
 import { SIGNUP_USER } from '../data/actions/Mutations'
+import { AUTH_TOKEN } from '../data/setup/constants'
+import { RouteComponentProps } from 'react-router'
 
 interface ISignupProps {}
 export interface ISignupState {
@@ -25,7 +27,7 @@ const handleInputChange = (e: React.SyntheticEvent<HTMLInputElement>, childKey: 
   }
 }
 
-class Signup extends React.Component<ISignupProps, ISignupState> {
+class Signup extends React.Component<ISignupProps & RouteComponentProps<{}>, ISignupState> {
   public state = {
     isSubmitting: false
   }
@@ -49,18 +51,40 @@ class Signup extends React.Component<ISignupProps, ISignupState> {
                     <form
                       onSubmit={async (e: React.SyntheticEvent<HTMLFormElement>) => {
                         e.preventDefault()
+                        // clear password on submit
+                        if (!qryRes.data) return
+                        qryRes.client.writeData({ data: { ...qryRes.data, forms: { ...qryRes.data.forms, input_Signup_Password: '' } } })
                         // guarding the submit function so that users wont submit multiple times
                         if (this.state.isSubmitting) return
                         // setting the state to true so only first submit will trigger signup mutation
                         this.setState({ isSubmitting: true })
-                        console.log('before signup')
-
-                        await signup({ variables: { email, name, password } })
-                        console.log(mtnRes)
-
+                        // wait for signup to return an response before setting isSubmitting to false
+                        let response: FetchResult<SignupUserMutation> | void
+                        try {
+                          response = await signup({ variables: { email, name, password } })
+                        } catch (error) {
+                          console.log(error)
+                          // call other function on error
+                        }
+                        // setting state iSubmitting to false because a reponse has been returned: pass or fail
                         this.setState({ isSubmitting: false })
-                        if (!qryRes.data) return
-                        qryRes.client.writeData({ data: { ...qryRes.data, forms: { ...qryRes.data.forms, input_Signup_Password: '' } } })
+                        // reset state using default state
+                        if (!response || !response.data) return
+                        qryRes.client.writeData({
+                          data: {
+                            ...qryRes.data,
+                            forms: {
+                              ...qryRes.data.forms,
+                              input_Signup_Name: '',
+                              input_Signup_Email: '',
+                              input_Signup_Password: ''
+                            }
+                          }
+                        })
+                        // store the token in local storage
+                        await localStorage.setItem(AUTH_TOKEN, response.data.signup.token)
+                        // signup finish and push to a page
+                        this.props.history.push('/')
                       }}
                     >
                       <input
@@ -86,6 +110,7 @@ class Signup extends React.Component<ISignupProps, ISignupState> {
                       <br />
                       <button type="submit">Submit</button>
                     </form>
+                    <button onClick={() => this.props.history.push('/login')}>Login In</button>
                     {mtnRes.loading && <p>Loading...</p>}
                     {mtnRes.error && <p>Error Please try again {mtnRes.error.message}</p>}
                   </>
