@@ -20,11 +20,12 @@
     "subscriptions-transport-ws": "^0.9.9"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
+    "start": "set PORT=1000 && react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "gentypes": "node buildSchema.js && apollo-codegen generate src/**/*.{tsx,ts} --schema schemaDump.json --add-typename --target typescript --output src/data/graphql-types.ts && rm schemaDump.json"
+    "gentypes":
+      "node buildSchema.js && apollo-codegen generate src/**/*.{tsx,ts} --schema schemaDump.json --add-typename --target typescript --output src/data/graphql-types.ts && rm schemaDump.json"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",

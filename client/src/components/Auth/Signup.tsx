@@ -1,31 +1,19 @@
 import * as React from 'react'
-import { Query, QueryResult, Mutation, FetchResult } from 'react-apollo'
-import { GetSignUpInputsQuery, SignupUserMutation, SignupUserMutationVariables } from '../data/graphql-types'
-import { GET_SIGN_UP_INPUTS } from '../data/actions/Queries'
-import { SIGNUP_USER } from '../data/actions/Mutations'
-import { AUTH_TOKEN } from '../data/setup/constants'
+import { Query, Mutation, FetchResult } from 'react-apollo'
+import { GetSignUpInputsQuery, SignupUserMutation, SignupUserMutationVariables } from '../../data/graphql-types'
+import { GET_SIGN_UP_INPUTS } from '../../data/actions/Queries'
+import { SIGNUP_USER } from '../../data/actions/Mutations'
+import { AUTH_TOKEN } from '../../data/setup/constants'
 import { RouteComponentProps } from 'react-router'
+import InputEl from '../Elements/InputEl'
 
 interface ISignupProps {}
 export interface ISignupState {
   isSubmitting: boolean
 }
 
-class WithSignUpInputQuery extends Query<GetSignUpInputsQuery> {}
+class WithQuery extends Query<GetSignUpInputsQuery> {}
 class WithSignUpMutation extends Mutation<SignupUserMutation, SignupUserMutationVariables> {}
-
-const handleInputChange = (e: React.SyntheticEvent<HTMLInputElement>, childKey: string, qryRes: QueryResult<GetSignUpInputsQuery>) => {
-  if (qryRes.data) {
-    const newData: GetSignUpInputsQuery = {
-      ...qryRes.data,
-      forms: {
-        ...qryRes.data.forms,
-        [childKey]: e.currentTarget.value
-      }
-    }
-    qryRes.client.writeData({ data: newData })
-  }
-}
 
 class Signup extends React.Component<ISignupProps & RouteComponentProps<{}>, ISignupState> {
   public state = {
@@ -34,7 +22,7 @@ class Signup extends React.Component<ISignupProps & RouteComponentProps<{}>, ISi
 
   public render() {
     return (
-      <WithSignUpInputQuery query={GET_SIGN_UP_INPUTS}>
+      <WithQuery query={GET_SIGN_UP_INPUTS}>
         {qryRes => {
           if (qryRes.error || !qryRes.data) return <h1>Error!!</h1>
 
@@ -49,7 +37,7 @@ class Signup extends React.Component<ISignupProps & RouteComponentProps<{}>, ISi
                 return (
                   <>
                     <form
-                      onSubmit={async (e: React.SyntheticEvent<HTMLFormElement>) => {
+                      onSubmit={async e => {
                         e.preventDefault()
                         // clear password on submit
                         if (!qryRes.data) return
@@ -87,26 +75,11 @@ class Signup extends React.Component<ISignupProps & RouteComponentProps<{}>, ISi
                         this.props.history.push('/')
                       }}
                     >
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={e => handleInputChange(e, 'input_Signup_Name', qryRes)}
-                        placeholder="Name"
-                      />
+                      <InputEl value={name} qryRes={qryRes} keyName="input_Signup_Name" placeholder="Name" />
                       <br />
-                      <input
-                        type="text"
-                        value={email}
-                        onChange={e => handleInputChange(e, 'input_Signup_Email', qryRes)}
-                        placeholder="Email"
-                      />
+                      <InputEl value={email} qryRes={qryRes} keyName="input_Signup_Email" placeholder="Email" />
                       <br />
-                      <input
-                        type="password"
-                        value={password}
-                        onChange={e => handleInputChange(e, 'input_Signup_Password', qryRes)}
-                        placeholder="password"
-                      />
+                      <InputEl type="password" value={password} qryRes={qryRes} keyName="input_Signup_Password" placeholder="Password" />
                       <br />
                       <button type="submit">Submit</button>
                     </form>
@@ -119,10 +92,8 @@ class Signup extends React.Component<ISignupProps & RouteComponentProps<{}>, ISi
             </WithSignUpMutation>
           )
         }}
-      </WithSignUpInputQuery>
+      </WithQuery>
     )
   }
 }
 export default Signup
-
-// TODO: https://www.youtube.com/watch?v=bXpuqDOYHGk&list=PLN3n1USn4xlmqhVdKMurNREwtiUpq-SFy&index=4

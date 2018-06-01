@@ -14,6 +14,18 @@ export interface SignupUserMutation {
   },
 };
 
+export interface LoginUserMutationVariables {
+  email: string,
+  password: string,
+};
+
+export interface LoginUserMutation {
+  login:  {
+    __typename: "AuthPayload",
+    token: string,
+  },
+};
+
 export interface GetSignUpInputsQuery {
   forms:  {
     __typename: "forms",
