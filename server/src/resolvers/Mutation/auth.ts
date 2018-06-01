@@ -1,8 +1,16 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
-import { Context } from '../../utils'
+import { Context, createToken, getUserId } from '../../utils'
 
 export const auth = {
+  async refreshToken(parent, args, ctx: Context, info) {
+    // first try to get use id using the token gotten from client
+    const userId = getUserId(ctx, args.token)
+    // if the token is valid and user is found
+    // then generate new token using the user id
+    return createToken(userId)
+  },
+
   async signup(parent, args, ctx: Context, info) {
     const password = await bcrypt.hash(args.password, 10)
     const user = await ctx.db.mutation.createUser({
@@ -10,7 +18,7 @@ export const auth = {
     })
 
     return {
-      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+      token: createToken(user.id),
       user
     }
   },
@@ -27,7 +35,7 @@ export const auth = {
     }
 
     return {
-      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+      token: createToken(user.id),
       user
     }
   }

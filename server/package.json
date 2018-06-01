@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.1",
+    "@types/jsonwebtoken": "^7.2.7",
     "dotenv-cli": "1.4.0",
     "graphql-cli": "2.16.0",
     "nodemon": "1.17.5",

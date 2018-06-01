@@ -26,6 +26,14 @@ export interface LoginUserMutation {
   },
 };
 
+export interface RefreshTokenMutationVariables {
+  token: string,
+};
+
+export interface RefreshTokenMutation {
+  refreshToken: string,
+};
+
 export interface GetSignUpInputsQuery {
   forms:  {
     __typename: "forms",
