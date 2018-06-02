@@ -1,13 +1,24 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "moduleResolution": "node",
     "module": "commonjs",
     "sourceMap": true,
     "rootDir": "src",
     "outDir": "dist",
-    "lib": [
-      "esnext", "dom"
-    ]
-  }
+    "lib": ["dom", "es2017", "esnext.asynciterable"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true
+  },
+  "exclude": ["node_modules", "**/generated"],
+  "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }

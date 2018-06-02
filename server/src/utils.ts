@@ -10,6 +10,8 @@ export function getUserId(ctx: Context) {
   const Authorization = ctx.request.get('Authorization')
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
+    // investigate if this is correct
+    if (!process.env.APP_SECRET) throw new AuthError()
     const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
     return userId
   }
@@ -17,7 +19,11 @@ export function getUserId(ctx: Context) {
   throw new AuthError()
 }
 
-export const createToken = userId => jwt.sign({ userId: String, expiresIn: '1d' }, process.env.APP_SECRET)
+export const createToken = (userId: any) => {
+  // investigate if this is correct
+  if (!process.env.APP_SECRET) return
+  return jwt.sign({ userId, expiresIn: '1d' }, process.env.APP_SECRET)
+}
 
 export class AuthError extends Error {
   constructor() {

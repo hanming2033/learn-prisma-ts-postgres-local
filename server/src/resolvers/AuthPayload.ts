@@ -1,7 +1,8 @@
 import { Context } from '../utils'
 
 export const AuthPayload = {
-  user: async ({ user: { id } }, args, ctx: Context, info) => {
+  user: async ({ user: { id } }: any, args: any, ctx: Context, info: any) => {
+    console.log(args)
     return ctx.db.query.user({ where: { id } }, info)
-  },
+  }
 }

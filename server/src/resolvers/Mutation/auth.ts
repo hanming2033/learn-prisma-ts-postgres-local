@@ -1,9 +1,10 @@
 import * as bcrypt from 'bcryptjs'
-import * as jwt from 'jsonwebtoken'
-import { Context, getUserId, createToken } from '../../utils'
+import { Context, createToken } from '../../utils'
 
 export const auth = {
-  async signup(parent, args, ctx: Context, info) {
+  async signup(_: any, args: any, ctx: Context, info: any) {
+    console.log(info)
+
     const password = await bcrypt.hash(args.password, 10)
     const user = await ctx.db.mutation.createUser({
       data: { ...args, password }
@@ -15,7 +16,8 @@ export const auth = {
     }
   },
 
-  async login(parent, { email, password }, ctx: Context, info) {
+  async login(_: any, { email, password }: any, ctx: Context, info: any) {
+    console.log(info)
     const user = await ctx.db.query.user({ where: { email } })
     if (!user) {
       return {
