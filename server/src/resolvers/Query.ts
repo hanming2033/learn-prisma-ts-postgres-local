@@ -1,15 +1,11 @@
-import { getUserId, Context } from '../utils'
+import { getUserId, IResolverMap } from '../utils'
 
-export const Query = {
-  feed(_: any, args: any, ctx: Context, info: any) {
-    console.log(args)
-
+export const Query: IResolverMap = {
+  feed(_, __, ctx, info) {
     return ctx.db.query.posts({ where: { isPublished: true } }, info)
   },
 
-  drafts(_: any, args: any, ctx: Context, info: any) {
-    console.log(args)
-
+  drafts(_, __, ctx, info) {
     const id = getUserId(ctx)
 
     const where = {
@@ -18,16 +14,14 @@ export const Query = {
         id
       }
     }
-
     return ctx.db.query.posts({ where }, info)
   },
 
-  post(_: any, { id }: any, ctx: Context, info: any) {
-    return ctx.db.query.post({ where: { id } }, info)
+  post(_, args, ctx, info) {
+    return ctx.db.query.post({ where: { id: args.id } }, info)
   },
 
-  me(_: any, args: any, ctx: Context, info: any) {
-    console.log(args)
+  me(_, __, ctx, info) {
     const id = getUserId(ctx)
     return ctx.db.query.user({ where: { id } }, info)
   }
