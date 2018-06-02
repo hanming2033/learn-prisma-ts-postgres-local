@@ -4,7 +4,6 @@ import { Context, createToken } from '../../utils'
 export const auth = {
   async signup(_: any, args: any, ctx: Context, info: any) {
     console.log(info)
-
     const password = await bcrypt.hash(args.password, 10)
     const user = await ctx.db.mutation.createUser({
       data: { ...args, password }
