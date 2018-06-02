@@ -3,7 +3,6 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import Signup from '../Auth/Signup'
 import Login from '../Auth/Login'
 import Nav from './Nav'
-import CheckToken from './CheckToken'
 
 class App extends React.Component {
   public render() {
@@ -12,7 +11,6 @@ class App extends React.Component {
         <div className="App">
           <Nav />
           <Switch>
-            <Route exact path="/" component={CheckToken} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/products" component={Login} />

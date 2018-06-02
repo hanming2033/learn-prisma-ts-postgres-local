@@ -21,17 +21,17 @@ export interface LoginUserMutationVariables {
 
 export interface LoginUserMutation {
   login:  {
-    __typename: "AuthPayload",
-    token: string,
+    __typename: "LoginResponse",
+    payload:  {
+      __typename: "AuthPayload",
+      token: string,
+    } | null,
+    error:  {
+      __typename: "Error",
+      field: string,
+      msg: string,
+    } | null,
   },
-};
-
-export interface RefreshTokenMutationVariables {
-  token: string,
-};
-
-export interface RefreshTokenMutation {
-  refreshToken: string,
 };
 
 export interface GetSignUpInputsQuery {

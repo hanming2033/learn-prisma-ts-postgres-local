@@ -13,13 +13,13 @@ export const SIGNUP_USER = gql`
 export const LOGIN_USER = gql`
   mutation LoginUser($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      token
+      payload {
+        token
+      }
+      error {
+        field
+        msg
+      }
     }
-  }
-`
-
-export const REFRESH_TOKEN = gql`
-  mutation RefreshToken($token: String!) {
-    refreshToken(token: $token)
   }
 `

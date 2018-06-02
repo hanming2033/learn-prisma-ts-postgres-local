@@ -44,31 +44,32 @@ class Login extends React.Component<ILoginProps & RouteComponentProps<{}>, ILogi
                       // setting the state to true so only first submit will trigger Login mutation
                       this.setState({ isSubmitting: true })
                       // wait for Login to return an response before setting isSubmitting to false
-                      let response: FetchResult<LoginUserMutation> | void
-                      try {
-                        response = await login({ variables: { email, password } })
-                      } catch (error) {
-                        console.log(error)
-                        // do somthing with error
-                      }
+                      const response: FetchResult<LoginUserMutation> | void = await login({ variables: { email, password } })
                       // setting state iSubmitting to false because a reponse has been returned: pass or fail
                       this.setState({ isSubmitting: false })
-                      // reset state using default state
+
                       if (!response || !response.data) return
-                      qryRes.client.writeData({
-                        data: {
-                          ...qryRes.data,
-                          forms: {
-                            ...qryRes.data.forms,
-                            input_Login_Email: '',
-                            input_Login_Password: ''
+                      // if payload is received
+                      if (response.data.login.payload) {
+                        // store the token in local storage
+                        await localStorage.setItem(AUTH_TOKEN, response.data.login.payload.token)
+                        // reset state using default state
+                        qryRes.client.writeData({
+                          data: {
+                            ...qryRes.data,
+                            forms: {
+                              ...qryRes.data.forms,
+                              input_Login_Email: '',
+                              input_Login_Password: ''
+                            }
                           }
-                        }
-                      })
-                      // store the token in local storage
-                      await localStorage.setItem(AUTH_TOKEN, response.data.login.token)
-                      // signup finish and push to a page
-                      this.props.history.push('/')
+                        })
+                        this.props.history.push('/')
+                      } else {
+                        // do something with the error
+                        console.log(response.data.login.error ? response.data.login.error.msg : 'No error message')
+                        return
+                      }
                     }}
                   >
                     <InputEl value={email} placeholder="Email" keyName="input_Login_Email" qryRes={qryRes} />
@@ -77,7 +78,10 @@ class Login extends React.Component<ILoginProps & RouteComponentProps<{}>, ILogi
                     <br />
                     <button>Login</button>
                     {mtnRes.loading && <p>Loading...</p>}
-                    {mtnRes.error && <p>Error Please try again {mtnRes.error.message}</p>}
+                    {mtnRes.data &&
+                      mtnRes.data.login.error && (
+                        <p>mtnRes.error will not work because error is passed in in data.. {mtnRes.data.login.error.msg}</p>
+                      )}
                   </form>
                 )
               }}
