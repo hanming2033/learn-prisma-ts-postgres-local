@@ -17,7 +17,7 @@ export const Query: IResolverMap = {
     return ctx.db.query.posts({ where }, info)
   },
 
-  post(_, args, ctx, info) {
+  post(_, args: GQL.IPostOnQueryArguments, ctx, info) {
     return ctx.db.query.post({ where: { id: args.id } }, info)
   },
 

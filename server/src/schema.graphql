@@ -1,4 +1,18 @@
 # import Post from "./generated/prisma.graphql"
+# learn how to merge multiple schema into one and run gql2ts
+# these are duplicated from datamodel.graphql
+# scalar DateTime
+
+# type Post {
+#   id: ID! @unique
+#   createdAt: DateTime!
+#   updatedAt: DateTime!
+#   isPublished: Boolean! @default(value: "false")
+#   title: String!
+#   text: String!
+#   author: User!
+# }
+# these are duplicated from datamodel.graphql
 
 type Query {
   feed: [Post!]!

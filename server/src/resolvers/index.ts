@@ -7,7 +7,7 @@ export default {
   Query,
   Mutation: {
     ...auth,
-    ...post,
+    ...post
   },
-  AuthPayload,
+  AuthPayload
 }
