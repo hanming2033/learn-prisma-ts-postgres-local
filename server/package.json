@@ -6,7 +6,10 @@
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "playground": "graphql playground",
     "build": "rimraf dist && tsc",
-    "gentypes": "gql2ts src/schema.graphql -o src/schema.d.ts"
+    "prismadeploy": "prisma deploy && graphql get-schema --project database && graphql codegen",
+    "gentypes":
+      "gql-gen --schema http://localhost:4000 --template graphql-codegen-typescript-template --out ./src/generated/server-types.d.ts",
+    "generateall": "yarn prismadeploy && yarn gentypes"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
@@ -20,6 +23,8 @@
     "dotenv-cli": "1.4.0",
     "gql2ts": "^1.8.0",
     "graphql-cli": "2.16.0",
+    "graphql-code-generator": "^0.9.1",
+    "graphql-codegen-typescript-template": "^0.9.1",
     "nodemon": "1.17.5",
     "npm-run-all": "4.1.3",
     "prettier": "^1.13.4",
