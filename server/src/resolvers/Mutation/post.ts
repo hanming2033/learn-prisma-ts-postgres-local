@@ -1,7 +1,9 @@
-import { getUserId, IContext } from '../../utils'
+import { getUserId, IResolverMap } from '../../utils'
+import { CreateDraftMutationArgs, PublishMutationArgs, DeletePostMutationArgs } from '../../generated/server-types'
+import { Post } from '../../generated/prisma'
 
-export const post = {
-  async createDraft(_: any, { title, text }: any, ctx: IContext, info: any) {
+export const post: IResolverMap = {
+  async createDraft(_, { title, text }: CreateDraftMutationArgs, ctx, info): Promise<Post> {
     const userId = getUserId(ctx)
     return ctx.db.mutation.createPost(
       {
@@ -18,7 +20,7 @@ export const post = {
     )
   },
 
-  async publish(_: any, { id }: any, ctx: IContext, info: any) {
+  async publish(_, { id }: PublishMutationArgs, ctx, info): Promise<Post | null> {
     const userId = getUserId(ctx)
     const postExists = await ctx.db.exists.Post({
       id,
@@ -37,7 +39,7 @@ export const post = {
     )
   },
 
-  async deletePost(_: any, { id }: any, ctx: IContext, info: any) {
+  async deletePost(_, { id }: DeletePostMutationArgs, ctx, info): Promise<Post | null> {
     console.log(info)
     const userId = getUserId(ctx)
     const postExists = await ctx.db.exists.Post({

@@ -1,8 +1,9 @@
 import * as bcrypt from 'bcryptjs'
-import { IContext, createToken } from '../../utils'
+import { IContext, createToken, IResolverMap } from '../../utils'
+import { SignupMutationArgs, LoginMutationArgs } from '../../generated/server-types'
 
-export const auth = {
-  async signup(_: any, args: any, ctx: IContext, info: any) {
+export const auth: IResolverMap = {
+  async signup(_, args: SignupMutationArgs, ctx: IContext, info) {
     console.log(info)
     const password = await bcrypt.hash(args.password, 10)
     const user = await ctx.db.mutation.createUser({
@@ -15,7 +16,7 @@ export const auth = {
     }
   },
 
-  async login(_: any, { email, password }: any, ctx: IContext, info: any) {
+  async login(_, { email, password }: LoginMutationArgs, ctx: IContext, info) {
     console.log(info)
     const user = await ctx.db.query.user({ where: { email } })
     if (!user) {

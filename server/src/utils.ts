@@ -11,16 +11,16 @@ export function getUserId(ctx: IContext) {
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
     // this is to remove the possibly undefined error
-    if (!process.env.APP_SECRET) return
+    if (!process.env.APP_SECRET) return ''
     const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
     return userId
   }
   throw new AuthError()
 }
 
-export const createToken = (userId: any) => {
+export const createToken = (userId: string) => {
   // this is to remove the possibly undefined error
-  if (!process.env.APP_SECRET) return
+  if (!process.env.APP_SECRET) return ''
   return jwt.sign({ userId, expiresIn: '1d' }, process.env.APP_SECRET)
 }
 
