@@ -15,18 +15,18 @@
 # these are duplicated from datamodel.graphql
 
 type Query {
-  feed: [Post!]!
-  drafts: [Post!]!
-  post(id: ID!): Post
+  # feed: [Post!]!
+  # drafts: [Post!]!
+  # post(id: ID!): Post
   me: User
 }
 
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): LoginResponse!
-  createDraft(title: String!, text: String!): Post!
-  publish(id: ID!): Post!
-  deletePost(id: ID!): Post!
+  # createDraft(title: String!, text: String!): Post!
+  # publish(id: ID!): Post!
+  # deletePost(id: ID!): Post!
 }
 
 type Error {
@@ -48,5 +48,5 @@ type User {
   id: ID!
   email: String!
   name: String!
-  posts: [Post!]!
+  # posts: [Post!]!
 }
